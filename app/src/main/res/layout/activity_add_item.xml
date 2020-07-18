@@ -12,19 +12,25 @@
         android:layout_marginBottom="61dp"
         android:orientation="vertical">
     <EditText
+        android:id="@+id/edittext_hint_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="6dp"
         android:paddingBottom="18dp"
         android:textSize="24sp"
+        android:textColor="@color/colorPrimary"
+        android:backgroundTint="@color/colorAccent"
         android:hint="@string/edittext_name_hint"/>
     <EditText
+        android:id="@+id/edittext_hint_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="6dp"
+        android:paddingTop="30dp"
         android:paddingBottom="18dp"
         android:inputType="number"
         android:textSize="24sp"
+        android:textColor="@color/colorPrimary"
+        android:backgroundTint="@color/colorAccent"
         android:hint="@string/edittext_price_hint"/>
     </LinearLayout>
     <Button
@@ -38,6 +44,7 @@
         android:textSize="14sp"
         android:drawableLeft="@drawable/ic_baseline_check_24"
         android:text="@string/add_button_title"
+        android:textColor="@color/colorAccent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:background="@null"/>
