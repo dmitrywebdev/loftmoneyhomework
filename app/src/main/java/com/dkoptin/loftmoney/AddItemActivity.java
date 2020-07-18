@@ -1,5 +1,6 @@
 package com.dkoptin.loftmoney;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,7 +30,7 @@ public class AddItemActivity extends AppCompatActivity{
     }
 
 
-    TextWatcher watcher = new TextWatcher() {
+        private TextWatcher watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             //auto generated
