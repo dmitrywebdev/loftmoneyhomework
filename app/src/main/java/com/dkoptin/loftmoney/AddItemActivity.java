@@ -1,9 +1,11 @@
 package com.dkoptin.loftmoney;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -54,5 +56,13 @@ public class AddItemActivity extends AppCompatActivity{
             }
         }
     };
+
+    public void onItemAdd(View v) {
+        Intent intent = new Intent();
+        intent.putExtra("name", editName.getText().toString());
+        intent.putExtra("price", editPrice.getText().toString());
+        setResult(RESULT_OK, intent);
+        finish();
+    }
 
 }
