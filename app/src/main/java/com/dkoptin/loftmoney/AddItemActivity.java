@@ -10,6 +10,8 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dkoptin.loftmoney.cells.money.MoneyCellModel;
+
 public class AddItemActivity extends AppCompatActivity{
 
     private EditText editName;
@@ -52,4 +54,5 @@ public class AddItemActivity extends AppCompatActivity{
             }
         }
     };
+
 }
