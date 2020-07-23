@@ -1,53 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:layout_above="@id/add_button"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="32dp"
-        android:paddingEnd="104dp"
-        android:layout_marginBottom="64dp"
-        android:orientation="vertical">
-    <EditText
-        android:id="@+id/edittext_hint_name"
+        android:layout_marginTop="102dp"
+        android:textColorHint="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edittext_hint_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="18dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:hint="@string/edittext_name_hint"
+            android:inputType="text"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="6dp"
-        android:paddingBottom="16dp"
-        android:textSize="24sp"
-        android:textColor="@color/colorPrimary"
-        android:backgroundTint="@color/colorAccent"
-        android:hint="@string/edittext_name_hint"/>
-    <EditText
-        android:id="@+id/edittext_hint_price"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="32dp"
-        android:paddingBottom="16dp"
-        android:inputType="number"
-        android:textSize="24sp"
-        android:textColor="@color/colorPrimary"
-        android:backgroundTint="@color/colorAccent"
-        android:hint="@string/edittext_price_hint"/>
-    </LinearLayout>
+        android:textColorHint="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@id/tilName">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edittext_hint_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="18dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="32dp"
+            android:hint="@string/edittext_price_hint"
+            android:inputType="number"
+            android:digits="0123456789."
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp"
+            app:layout_constraintTop_toTopOf="@id/edittext_hint_name"/>
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
         android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="40dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="8dp"
-        android:textSize="14sp"
-        android:drawableLeft="@drawable/ic_addbutton_disabled"
+        android:layout_marginTop="64dp"
+        android:background="@android:color/transparent"
+        android:drawableStart="@drawable/ic_addbutton_disabled"
+        android:enabled="false"
+        android:onClick="onItemAdd"
         android:text="@string/add_button_title"
         android:textColor="@color/colorAccent"
-        android:onClick="onItemAdd"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:background="@null"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilPrice"/>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

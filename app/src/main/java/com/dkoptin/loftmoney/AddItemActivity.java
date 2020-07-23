@@ -13,11 +13,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dkoptin.loftmoney.cells.money.MoneyCellModel;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class AddItemActivity extends AppCompatActivity{
 
-    private EditText editName;
-    private EditText editPrice;
+    private TextInputEditText editName;
+    private TextInputEditText editPrice;
     private Button addButton;
 
     @Override
@@ -50,9 +51,13 @@ public class AddItemActivity extends AppCompatActivity{
             if(editName.getText().length() > 0 && editPrice.getText().length() > 0){
                 addButton.setEnabled(true);
                 addButton.setTextColor(getResources().getColor(R.color.colorTemp));
+                Drawable img = getApplicationContext().getResources().getDrawable(R.drawable.ic_addbutton_enabled);
+                addButton.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
             } else {
                 addButton.setEnabled(false);
                 addButton.setTextColor(getResources().getColor(R.color.colorAccent));
+                Drawable img = getApplicationContext().getResources().getDrawable(R.drawable.ic_addbutton_disabled);
+                addButton.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
             }
         }
     };

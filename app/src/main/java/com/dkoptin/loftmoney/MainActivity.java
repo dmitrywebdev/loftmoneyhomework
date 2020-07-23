@@ -1,65 +1,55 @@
 package com.dkoptin.loftmoney;
 
-import androidx.annotation.Nullable;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
 
-import com.dkoptin.loftmoney.cells.money.MoneyAdapter;
-import com.dkoptin.loftmoney.cells.money.MoneyCellModel;
-import com.dkoptin.loftmoney.util.RequestCode;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    MoneyAdapter moneyAdapter;
-    String name;
-    String price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = findViewById(R.id.costsRecyclerView);
-        moneyAdapter = new MoneyAdapter();
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
-        recyclerView.setAdapter(moneyAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+        ViewPager viewPager = findViewById(R.id.viewPager);
+        viewPager.setAdapter(new BudgetPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
 
-        FloatingActionButton addCellExpenses = findViewById(R.id.addCellExpeneses);
-        addCellExpenses.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddItemActivity.class);
-                startActivityForResult(intent, RequestCode.REQUEST_CODE_ADD_ITEM);
-            }
-        });
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setText(R.string.expenses);
+        tabLayout.getTabAt(1).setText(R.string.income);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-            assert data != null;
-            name = data.getStringExtra("name");
-            price = data.getStringExtra("price");
-            moneyAdapter.setData(generateExpenses());
+    static class BudgetPagerAdapter extends FragmentPagerAdapter {
 
+        public BudgetPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+            super(fm, behavior);
         }
-    private List<MoneyCellModel> generateExpenses() {
-        List<MoneyCellModel> moneyCellModels = new ArrayList<>();
-        moneyCellModels.add(new MoneyCellModel(name, price, R.color.expenseColor));
-        return moneyCellModels;
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return new BudgetFragment();
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
     }
-    }
+
+}
 
 
