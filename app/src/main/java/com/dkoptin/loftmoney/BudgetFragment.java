@@ -2,6 +2,7 @@ package com.dkoptin.loftmoney;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,5 +66,9 @@ public class BudgetFragment extends Fragment {
         moneyCellModels.add(new MoneyCellModel(name, (price + " ₽"), R.color.expenseColor));
         return moneyCellModels;
     }
-
+    private List<MoneyCellModel> generateIncome() {
+        List<MoneyCellModel> moneyCellModels = new ArrayList<>();
+        moneyCellModels.add(new MoneyCellModel(name, (price + " ₽"), R.color.colorTemp));
+        return moneyCellModels;
+    }
 }

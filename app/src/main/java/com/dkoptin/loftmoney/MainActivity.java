@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
+
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
@@ -15,7 +15,6 @@ import com.google.android.material.tabs.TabLayout;
 
 
 public class MainActivity extends AppCompatActivity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,28 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setText(R.string.expenses);
         tabLayout.getTabAt(1).setText(R.string.income);
+
+        viewPager.addOnPageChangeListener(viewListener);
     }
+
+
+        ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener () {
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
     static class BudgetPagerAdapter extends FragmentPagerAdapter {
 
