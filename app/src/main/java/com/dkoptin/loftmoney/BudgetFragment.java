@@ -2,7 +2,6 @@ package com.dkoptin.loftmoney;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,22 +52,38 @@ public class BudgetFragment extends Fragment {
         return view;
     }
 
+    public static BudgetFragment newInstance(BudgetFragmentTags tag) {
+        BudgetFragment myFragment = new BudgetFragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable("someTag", tag);
+        myFragment.setArguments(args);
+
+        return myFragment;
+    }
+
+    private List<MoneyCellModel> generateExpenses() {
+        List<MoneyCellModel> moneyCellModels = new ArrayList<>();
+        moneyCellModels.add(new MoneyCellModel(name, (price + " ₽"), R.color.expenseColor));
+        return moneyCellModels;
+    }
+
+    private List<MoneyCellModel> generateIncome() {
+        List<MoneyCellModel> moneyCellModels = new ArrayList<>();
+        moneyCellModels.add(new MoneyCellModel(name, (price + " ₽"), R.color.colorTemp));
+        return moneyCellModels;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         assert data != null;
         name = data.getStringExtra("name");
         price = data.getStringExtra("price");
-        moneyAdapter.addData(generateExpenses());
-    }
-    private List<MoneyCellModel> generateExpenses() {
-        List<MoneyCellModel> moneyCellModels = new ArrayList<>();
-        moneyCellModels.add(new MoneyCellModel(name, (price + " ₽"), R.color.expenseColor));
-        return moneyCellModels;
-    }
-    private List<MoneyCellModel> generateIncome() {
-        List<MoneyCellModel> moneyCellModels = new ArrayList<>();
-        moneyCellModels.add(new MoneyCellModel(name, (price + " ₽"), R.color.colorTemp));
-        return moneyCellModels;
+        if (((BudgetFragmentTags) getArguments().getSerializable("someTag")) == BudgetFragmentTags.EXPENSES) {
+            moneyAdapter.addData(generateExpenses());
+        } else {
+            moneyAdapter.addData(generateIncome());
+        }
     }
 }

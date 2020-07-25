@@ -1,15 +1,14 @@
 package com.dkoptin.loftmoney;
 
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-
 import androidx.viewpager.widget.ViewPager;
-
-import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-        ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener () {
+    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -61,7 +60,13 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return new BudgetFragment();
+            BudgetFragmentTags tag;
+            if (position == 0) {
+                tag = BudgetFragmentTags.EXPENSES;
+            } else {
+                tag = BudgetFragmentTags.INCOME;
+            }
+            return BudgetFragment.newInstance(tag);
         }
 
         @Override
