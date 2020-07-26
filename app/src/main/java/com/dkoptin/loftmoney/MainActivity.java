@@ -61,7 +61,13 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return new BudgetFragment();
+            BudgetFragmentTags tag;
+            if(position == 0) {
+                tag = BudgetFragmentTags.EXPENSES;
+            } else {
+                tag = BudgetFragmentTags.INCOME;
+            }
+            return BudgetFragment.newInstance(tag);
         }
 
         @Override

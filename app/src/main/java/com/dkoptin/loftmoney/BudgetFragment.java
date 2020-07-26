@@ -53,14 +53,16 @@ public class BudgetFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        assert data != null;
-        name = data.getStringExtra("name");
-        price = data.getStringExtra("price");
-        moneyAdapter.addData(generateExpenses());
+    public static BudgetFragment newInstance(BudgetFragmentTags tag) {
+        BudgetFragment myFragment = new BudgetFragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable("someTag", tag);
+        myFragment.setArguments(args);
+
+        return myFragment;
     }
+
     private List<MoneyCellModel> generateExpenses() {
         List<MoneyCellModel> moneyCellModels = new ArrayList<>();
         moneyCellModels.add(new MoneyCellModel(name, (price + " ₽"), R.color.expenseColor));
@@ -70,5 +72,18 @@ public class BudgetFragment extends Fragment {
         List<MoneyCellModel> moneyCellModels = new ArrayList<>();
         moneyCellModels.add(new MoneyCellModel(name, (price + " ₽"), R.color.colorTemp));
         return moneyCellModels;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        assert data != null;
+        name = data.getStringExtra("name");
+        price = data.getStringExtra("price");
+        if (((BudgetFragmentTags) getArguments().getSerializable("someTag")) == BudgetFragmentTags.EXPENSES) {
+            moneyAdapter.addData(generateExpenses());
+        } else {
+            moneyAdapter.addData(generateIncome());
+        }
     }
 }
