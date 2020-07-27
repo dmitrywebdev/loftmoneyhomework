@@ -15,8 +15,7 @@
         android:layout_weight="1"
         android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif-medium"
-        android:textSize="20sp"
-        android:text="Олег наконец-то вернул долг"/>
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/cellMoneyValueView"
@@ -24,7 +23,6 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
         android:textSize="20sp"
-        android:layout_gravity="center_vertical"
-        android:text="300000 ₽" />
+        android:layout_gravity="center_vertical"/>
 
 </LinearLayout>
