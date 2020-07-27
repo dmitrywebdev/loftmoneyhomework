@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#3735FA</color>
     <color name="colorAccent">#dbdbdb</color>
     <color name="colorTemp">#7ed321</color>
+    <color name="expenseColor">#4a90e2</color>
+
 </resources>
