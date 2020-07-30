@@ -2,6 +2,7 @@ package com.dkoptin.loftmoney;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +16,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dkoptin.loftmoney.cells.money.MoneyAdapter;
 import com.dkoptin.loftmoney.cells.money.MoneyCellModel;
+import com.dkoptin.loftmoney.remote.MoneyItem;
+import com.dkoptin.loftmoney.remote.MoneyResponse;
 import com.dkoptin.loftmoney.util.RequestCode;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class BudgetFragment extends Fragment {
 
     RecyclerView recyclerView;
     MoneyAdapter moneyAdapter;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
     private String name;
     private String price;
 
@@ -32,6 +43,12 @@ public class BudgetFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget, null);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.costsRecyclerView);
         moneyAdapter = new MoneyAdapter();
 
@@ -49,7 +66,8 @@ public class BudgetFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.recyclerview_divider));
         recyclerView.addItemDecoration(dividerItemDecoration);
-        return view;
+
+        generateExpenses();
     }
 
     public static BudgetFragment newInstance(BudgetFragmentTags tag) {
@@ -62,10 +80,30 @@ public class BudgetFragment extends Fragment {
         return myFragment;
     }
 
-    private List<MoneyCellModel> generateExpenses() {
-        List<MoneyCellModel> moneyCellModels = new ArrayList<>();
-        moneyCellModels.add(new MoneyCellModel(name, (price + " ₽"), R.color.expenseColor));
-        return moneyCellModels;
+    private void generateExpenses() {
+        final List<MoneyCellModel> moneyCellModels = new ArrayList<>();
+
+        Disposable disposable = ((LoftApp) (Objects.requireNonNull(getActivity()).getApplication())).getMoneyApi().getMoney("expense")
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<MoneyResponse>() {
+                    @Override
+                    public void accept(MoneyResponse moneyResponse) throws Exception {
+                        for (MoneyItem moneyItem : moneyResponse.getMoneyItemList()){
+                            moneyCellModels.add(MoneyCellModel.getInstance(moneyItem));
+                        }
+                        moneyAdapter.setData(moneyCellModels);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.e("TAG", "Error " + throwable);
+                    }
+                });
+
+        compositeDisposable.add(disposable);
+//        moneyCellModels.add(new MoneyCellModel(name, (price + " ₽"), R.color.expenseColor));
+//        return moneyCellModels;
     }
 
     private List<MoneyCellModel> generateIncome() {
@@ -80,10 +118,10 @@ public class BudgetFragment extends Fragment {
         assert data != null;
         name = data.getStringExtra("name");
         price = data.getStringExtra("price");
-        if (((BudgetFragmentTags) getArguments().getSerializable("someTag")) == BudgetFragmentTags.EXPENSES) {
+      /*  if (((BudgetFragmentTags) getArguments().getSerializable("someTag")) == BudgetFragmentTags.EXPENSES) {
             moneyAdapter.addData(generateExpenses());
         } else {
             moneyAdapter.addData(generateIncome());
-        }
+        }*/
     }
 }
