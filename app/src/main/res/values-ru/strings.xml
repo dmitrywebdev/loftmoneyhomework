@@ -5,4 +5,6 @@
     <string name="edittext_name_hint">Название</string>
     <string name="expenses">Расходы</string>
     <string name="income">Доходы</string>
+    <string name="welcome_login">Войти</string>
+    <string name="activityMainToolbarTitle">Учет бюджета</string>
 </resources>

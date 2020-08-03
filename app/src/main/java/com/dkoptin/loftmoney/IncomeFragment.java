@@ -1,6 +1,5 @@
 package com.dkoptin.loftmoney;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -22,7 +21,6 @@ import com.dkoptin.loftmoney.remote.MoneyItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -31,7 +29,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class BudgetFragment extends Fragment {
+public class IncomeFragment extends Fragment {
 
     RecyclerView recyclerView;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -59,7 +57,7 @@ public class BudgetFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                generateExpenses();
+                generateIncome();
             }
         });
 
@@ -71,14 +69,13 @@ public class BudgetFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        generateExpenses();
+        generateIncome();
     }
 
-
-    private void generateExpenses() {
+    private void generateIncome() {
         final List<MoneyCellModel> moneyCellModels = new ArrayList<>();
         final String token = PreferenceManager.getDefaultSharedPreferences(getContext()).getString(Prefs.TOKEN,"");
-        Disposable disposable = ((LoftApp) getActivity().getApplication()).getMoneyApi().getMoney(token, "expense")
+        Disposable disposable = ((LoftApp) getActivity().getApplication()).getMoneyApi().getMoney(token, "income")
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate(new Action() {

@@ -1,8 +1,9 @@
 package com.dkoptin.loftmoney;
 
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,21 +12,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.dkoptin.loftmoney.cells.money.MoneyCellModel;
-import com.dkoptin.loftmoney.remote.MoneyItem;
-import com.dkoptin.loftmoney.remote.MoneyResponse;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.Scheduler;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -38,8 +26,22 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = findViewById(R.id.tabs);
 
-        ViewPager viewPager = findViewById(R.id.viewPager);
+        final ViewPager viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(new BudgetPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
+
+        FloatingActionButton addCellExpenses = findViewById(R.id.addCellExpeneses);
+        addCellExpenses.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String tag;
+                if(viewPager.getCurrentItem() == 0) {
+                    tag = "expense";
+                } else {
+                    tag = "income";
+                }
+                startActivity(new Intent(MainActivity.this, AddItemActivity.class).putExtra("tag", tag));
+            }
+        });
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setText(R.string.expenses);
@@ -57,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            BudgetFragmentTags tag;
-            if(position == 0) {
-
-                tag = BudgetFragmentTags.EXPENSES;
-            } else {
-                tag = BudgetFragmentTags.INCOME;
+            switch (position) {
+                case 0:
+                    return new BudgetFragment();
+                case 1:
+                    return new IncomeFragment();
+                default:
+                    return null;
             }
-            return BudgetFragment.newInstance(tag);
         }
 
         @Override

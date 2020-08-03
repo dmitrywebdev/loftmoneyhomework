@@ -7,7 +7,7 @@ public class MoneyItem {
     @SerializedName("name") private String name;
     @SerializedName("price") private int price;
     @SerializedName("type") private String type;
-    @SerializedName("date") private String date;
+    @SerializedName("created_at") private String date;
 
     public String getItemId() {
         return itemId;

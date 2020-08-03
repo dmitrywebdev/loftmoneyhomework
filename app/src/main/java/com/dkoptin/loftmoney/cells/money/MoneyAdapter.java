@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dkoptin.loftmoney.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MoneyAdapter extends RecyclerView.Adapter<MoneyAdapter.MoneyViewHolder> {
@@ -26,6 +28,16 @@ public class MoneyAdapter extends RecyclerView.Adapter<MoneyAdapter.MoneyViewHol
 
     public void addData(List<MoneyCellModel> moneyCellModels) {
         this.moneyCellModels.addAll(moneyCellModels);
+        notifyDataSetChanged();
+    }
+
+   public void sortArrayList() {
+        Collections.sort(moneyCellModels, new Comparator<MoneyCellModel>(){
+            @Override
+            public int compare(MoneyCellModel item1, MoneyCellModel item2) {
+                return item1.getDate().compareTo(item2.getDate());
+            }
+        });
         notifyDataSetChanged();
     }
 
