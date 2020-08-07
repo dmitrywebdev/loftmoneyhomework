@@ -25,7 +25,7 @@ public class LoftApp extends Application {
         configureNetwork();
     }
 
-    private void configureNetwork() {
+     private void configureNetwork() {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 

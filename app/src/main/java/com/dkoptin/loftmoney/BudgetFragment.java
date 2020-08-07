@@ -1,10 +1,16 @@
 package com.dkoptin.loftmoney;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,11 +24,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.dkoptin.loftmoney.cells.money.MoneyAdapter;
 import com.dkoptin.loftmoney.cells.money.MoneyCellModel;
+import com.dkoptin.loftmoney.remote.AuthResponse;
+import com.dkoptin.loftmoney.remote.MoneyApi;
 import com.dkoptin.loftmoney.remote.MoneyItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -30,14 +39,19 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class BudgetFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
-    SwipeRefreshLayout swipeRefreshLayout;
+public class BudgetFragment extends Fragment implements MoneyAdapterListener, ActionMode.Callback {
 
-    MoneyAdapter moneyAdapter;
+    private RecyclerView recyclerView;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ActionMode mActionMode;
+
+    private MoneyAdapter moneyAdapter;
 
     @Nullable
     @Override
@@ -51,6 +65,7 @@ public class BudgetFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.costsRecyclerView);
         moneyAdapter = new MoneyAdapter();
+        moneyAdapter.setMoneyAdapterListener(this);
 
         recyclerView.setAdapter(moneyAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -103,5 +118,83 @@ public class BudgetFragment extends Fragment {
                     }
                 });
         compositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void onItemClick(MoneyCellModel moneyCellModel, int position) {
+        moneyAdapter.clearItem(position);
+        if (mActionMode != null) {
+            mActionMode.setTitle(getString(R.string.selected, String.valueOf(moneyAdapter.getSelectedSize())));
+        }
+    }
+
+    @Override
+    public void onItemLongClick(MoneyCellModel moneyCellModel, int position) {
+        if (mActionMode == null) {
+            Objects.requireNonNull(getActivity()).startActionMode(this);
+        }
+        moneyAdapter.toggleItem(position);
+        if (mActionMode != null) {
+            mActionMode.setTitle(getString(R.string.selected, String.valueOf(moneyAdapter.getSelectedSize())));
+        }
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+        mActionMode = actionMode;
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+        MenuInflater menuInflater = new MenuInflater(getActivity());
+        menuInflater.inflate(R.menu.menu_delete, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.remove) {
+            new AlertDialog.Builder(getContext())
+                    .setMessage(R.string.confirmation)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialogInterface, final int i) {
+                            removeItems();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }).show();
+        }
+        return true;
+    }
+
+    private void removeItems() {
+        String token = PreferenceManager.getDefaultSharedPreferences(getContext()).getString(Prefs.TOKEN, "");
+        List<Integer> selectedItems = moneyAdapter.getSelectedItemsIds();
+        for (Integer itemId : selectedItems) {
+            Call<AuthResponse> call = ((LoftApp) Objects.requireNonNull(getActivity()).getApplication()).getMoneyApi().removeItem(String.valueOf(itemId.intValue()), token);
+            call.enqueue(new Callback<AuthResponse>() {
+                @Override
+                public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                    moneyAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(Call<AuthResponse> call, Throwable t) {
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode actionMode) {
+        mActionMode = null;
+        moneyAdapter.clearSelections();
     }
 }

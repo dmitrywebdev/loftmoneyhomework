@@ -7,6 +7,7 @@
     <string name="income">Income</string>
     <string name="welcome_login">Login</string>
     <string name="activityMainToolbarTitle">Budget accounting</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="selected">Selected: %1$s</string>
+    <string name="remove">Remove</string>
+    <string name="confirmation">Are you sure you want to delete the selected items</string>
 </resources>

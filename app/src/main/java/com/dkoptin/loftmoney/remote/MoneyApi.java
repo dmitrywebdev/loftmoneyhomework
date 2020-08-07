@@ -2,8 +2,10 @@ package com.dkoptin.loftmoney.remote;
 
 import java.util.List;
 
+
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -23,4 +25,7 @@ public interface MoneyApi {
                          @Field("name") String name,
                          @Field("price") String price,
                          @Field("type") String type);
+
+    @POST("items/remove")
+    Call<AuthResponse> removeItem(@Query("id") String id, @Query("auth-token") String token);
 }
