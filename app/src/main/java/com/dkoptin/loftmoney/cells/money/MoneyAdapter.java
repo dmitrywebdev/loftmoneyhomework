@@ -50,12 +50,13 @@ public class MoneyAdapter extends RecyclerView.Adapter<MoneyAdapter.MoneyViewHol
         return result;
     }
 
-    public List<Integer> getSelectedItemsIds() {
+
+    public List<Integer> getSelectedItemIds() {
         List<Integer> result = new ArrayList<>();
         int i = 0;
         for (MoneyCellModel moneyCellModel : moneyCellModels) {
             if (mSelectedItems.get(i)) {
-                result.add(moneyCellModel.getId());
+                result.add(Integer.valueOf(moneyCellModel.getId()));
             }
             i++;
         }

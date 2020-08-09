@@ -4,17 +4,18 @@ import com.dkoptin.loftmoney.R;
 import com.dkoptin.loftmoney.remote.MoneyItem;
 
 public class MoneyCellModel {
-    private int id;
+    private String id;
     private String name;
     private String value;
     private Integer color;
     private String date;
 
-    public MoneyCellModel(String name, String value, Integer color, String date) {
+    public MoneyCellModel(String name, String value, Integer color, String date, String id) {
         this.name = name;
         this.value = value;
         this.color = color;
         this.date = date;
+        this.id = id;
     }
 
 
@@ -22,10 +23,10 @@ public class MoneyCellModel {
         return new MoneyCellModel(moneyItem.getName(),
                 moneyItem.getPrice() + " ₽",
                 moneyItem.getType().equals("expense") ? R.color.expenseColor : R.color.colorTemp,
-                moneyItem.getDate());
+                moneyItem.getDate(), moneyItem.getItemId());
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

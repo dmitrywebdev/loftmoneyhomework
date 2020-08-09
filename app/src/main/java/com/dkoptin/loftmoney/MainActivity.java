@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TabLayout mTabLayout;
     private Toolbar mToolBar;
+    private FloatingActionButton addCellExpenses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,24 +36,45 @@ public class MainActivity extends AppCompatActivity {
         final ViewPager viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(new BudgetPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
 
-        FloatingActionButton addCellExpenses = findViewById(R.id.addCellExpeneses);
-        addCellExpenses.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String tag;
-                if(viewPager.getCurrentItem() == 0) {
-                    tag = "expense";
-                } else {
-                    tag = "income";
+            addCellExpenses = findViewById(R.id.addCellExpeneses);
+            addCellExpenses.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final int activeFragmentIndex = viewPager.getCurrentItem();
+                    String tag;
+                    if (activeFragmentIndex == 0) {
+                        tag = "expense";
+                    } else {
+                        tag = "income"; 
+                    }
+                    startActivity(new Intent(MainActivity.this, AddItemActivity.class).putExtra("tag", tag));
+                    overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                 }
-                startActivity(new Intent(MainActivity.this, AddItemActivity.class).putExtra("tag", tag));
-            }
-        });
+            });
+
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    if (position == 2) {
+                        addCellExpenses.hide();
+                    } else {
+                        addCellExpenses.show();
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                }
+            });
 
         mTabLayout.setupWithViewPager(viewPager);
         mTabLayout.getTabAt(0).setText(R.string.expenses);
         mTabLayout.getTabAt(1).setText(R.string.income);
-
+        mTabLayout.getTabAt(2).setText(R.string.balance);
     }
 
     @Override
@@ -60,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActionModeStarted(mode);
         mTabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_gray_blue));
         mToolBar.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_gray_blue));
+        addCellExpenses.hide();
     }
 
     @Override
@@ -67,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActionModeFinished(mode);
         mTabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         mToolBar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        addCellExpenses.show();
     }
 
     static class BudgetPagerAdapter extends FragmentPagerAdapter {
@@ -83,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
                     return new BudgetFragment();
                 case 1:
                     return new IncomeFragment();
+                case 2:
+                    return new DiagramFragment();
                 default:
                     return null;
             }
@@ -90,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
     }
 

@@ -39,9 +39,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 
 public class BudgetFragment extends Fragment implements MoneyAdapterListener, ActionMode.Callback {
@@ -161,6 +159,7 @@ public class BudgetFragment extends Fragment implements MoneyAdapterListener, Ac
                         @Override
                         public void onClick(final DialogInterface dialogInterface, final int i) {
                             removeItems();
+                            actionMode.finish();
                         }
                     })
                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -175,20 +174,25 @@ public class BudgetFragment extends Fragment implements MoneyAdapterListener, Ac
 
     private void removeItems() {
         String token = PreferenceManager.getDefaultSharedPreferences(getContext()).getString(Prefs.TOKEN, "");
-        List<Integer> selectedItems = moneyAdapter.getSelectedItemsIds();
+        List<Integer> selectedItems = moneyAdapter.getSelectedItemIds();
         for (Integer itemId : selectedItems) {
-            Call<AuthResponse> call = ((LoftApp) Objects.requireNonNull(getActivity()).getApplication()).getMoneyApi().removeItem(String.valueOf(itemId.intValue()), token);
-            call.enqueue(new Callback<AuthResponse>() {
-                @Override
-                public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
-                    moneyAdapter.notifyDataSetChanged();
-                }
+            Disposable disposable = ((LoftApp) getActivity().getApplication()).getMoneyApi().removeItem(String.valueOf(itemId.intValue()), token)
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            generateExpenses();
+                            moneyAdapter.clearSelections();
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            Log.e("TAG", "Error" + throwable.getLocalizedMessage());
+                        }
+                    });
+            compositeDisposable.add(disposable);
 
-                @Override
-                public void onFailure(Call<AuthResponse> call, Throwable t) {
-
-                }
-            });
         }
     }
 
