@@ -4,9 +4,14 @@
     <string name="edittext_price_hint">Price</string>
     <string name="edittext_name_hint">Name</string>
     <string name="expenses">Expenses</string>
-    <string name="income">Income</string>
+    <string name="incomes">Income</string>
     <string name="welcome_login">Login</string>
     <string name="activityMainToolbarTitle">Budget accounting</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="selected">Selected: %1$s</string>
+    <string name="remove">Remove</string>
+    <string name="confirmation">Are you sure you want to delete the selected items</string>
+    <string name="balance">Balance</string>
+    <string name="balance_finance_title">Available finances</string>
+    <string name="cost">Expense</string>
+    <string name="income">Income</string>
 </resources>

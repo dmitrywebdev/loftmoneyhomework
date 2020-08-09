@@ -49,7 +49,13 @@ public class AddItemActivity extends AppCompatActivity{
         changeColorText();
     }
 
-        private TextWatcher watcher = new TextWatcher() {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        AddItemActivity.this.overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+    }
+
+    private TextWatcher watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             //auto generated
@@ -106,27 +112,25 @@ public class AddItemActivity extends AppCompatActivity{
         }
     }
     private void configureAddingExpenses() {
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final String token = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Prefs.TOKEN,"");
-                compositeDisposable.add(((LoftApp) getApplication()).getMoneyApi().addMoney(token, name, value,  getIntent().getExtras().getString("tag"))
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Action() {
-                            @Override
-                            public void run() throws Exception {
-                                Log.e("TAG", "Completed");
-                                finish();
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                Log.e("TAG", "Error" + throwable.getLocalizedMessage());
+        addButton.setOnClickListener(view -> {
+            final String token = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Prefs.TOKEN,"");
+            compositeDisposable.add(((LoftApp) getApplication()).getMoneyApi().addMoney(token, name, value,  getIntent().getExtras().getString("tag"))
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            Log.e("TAG", "Completed");
+                            finish();
+                            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            Log.e("TAG", "Error" + throwable.getLocalizedMessage());
 
-                            }
-                        }));
-            }
+                        }
+                    }));
         });
     }
 

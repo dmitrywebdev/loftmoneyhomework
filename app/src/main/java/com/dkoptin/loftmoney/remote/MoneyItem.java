@@ -2,12 +2,13 @@ package com.dkoptin.loftmoney.remote;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MoneyItem {
+ public class MoneyItem {
     @SerializedName("id") private String itemId;
     @SerializedName("name") private String name;
     @SerializedName("price") private int price;
     @SerializedName("type") private String type;
     @SerializedName("created_at") private String date;
+
 
     public String getItemId() {
         return itemId;

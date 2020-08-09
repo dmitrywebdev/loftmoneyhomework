@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
@@ -30,10 +31,12 @@ public class SplashActivity extends AppCompatActivity {
     private void routeToMain() {
         Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(mainIntent);
+        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
     }
 
     private void routeToLogin() {
         Intent LoginIntent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(LoginIntent);
+        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
     }
 }
