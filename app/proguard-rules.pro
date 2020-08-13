@@ -19,3 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+-keep class com.dkoptin.loftmoney.remote.AuthApi {*;}
+-keep class com.dkoptin.loftmoney.remote.AuthResponse {*;}
+-keep class com.dkoptin.loftmoney.remote.BalanceResponse {*;}
+-keep class com.dkoptin.loftmoney.remote.MoneyApi {*;}
+-keep class com.dkoptin.loftmoney.remote.MoneyItem {*;}

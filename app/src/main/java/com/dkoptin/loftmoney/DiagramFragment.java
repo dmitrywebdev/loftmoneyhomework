@@ -62,13 +62,13 @@ public class DiagramFragment extends Fragment {
                         final String totalExpenses = balanceResponse.getTotalExpenses();
                         final String totalIncomes = balanceResponse.getTotalIncomes();
 
-                        expenseValue.setText(String.valueOf(totalExpenses));
-                        incomeValue.setText(String.valueOf(totalIncomes));
+                        expenseValue.setText(String.valueOf(totalExpenses) + " ₽");
+                        incomeValue.setText(String.valueOf(totalIncomes) + " ₽");
 
                         int totalExpensesInt = Integer.parseInt(totalExpenses);
                         int totalIncomesInt = Integer.parseInt(totalIncomes);
 
-                        availableBalance.setText(String.valueOf(totalIncomesInt - totalExpensesInt));
+                        availableBalance.setText(String.valueOf(totalIncomesInt - totalExpensesInt) + " ₽");
                         balanceView.update(totalExpensesInt,totalIncomesInt);
                     }
                 }, new Consumer<Throwable>() {
